@@ -59,10 +59,11 @@ services:
       - "3000:3000"
     networks:
       - app-network
-    volumes:
-      - type: bind
-        source: ./ui
-        target: /app
+    # volumes:
+    #   - type: bind
+    #     source: ./ui
+    #     target: /app
+    #   - /app/node_modules
 
 networks:
   app-network:

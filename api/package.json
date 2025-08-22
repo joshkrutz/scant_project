@@ -1,0 +1,21 @@
+{
+  "name": "test-api",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run && nodemon ./index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "knex": "^3.1.0",
+    "nodemon": "^3.1.10",
+    "pg": "^8.16.3"
+  }
+}

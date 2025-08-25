@@ -1,7 +1,11 @@
 export function NoPage() {
   return (
     <>
-      <h1>Page Not Found</h1>
+      <img
+        className="max-w-[1024px] w-[50%]"
+        src="./404_dark.png"
+        alt="404 Page Not Found"
+      />
     </>
   );
 }

@@ -7,8 +7,8 @@ exports.seed = async function(knex) {
   await knex('end_product').del()
   await knex('end_product').insert([
     {
-      sat_name: 'GPS IIIF SV1',
-      mission: 'GPS',
+      name: 'GPS IIIF SV1',
+      product_description: 'GPS',
       generation: 'IIIF',
       image_url: 'https://',
       last_node_id: '3',

@@ -6,8 +6,8 @@ exports.up = function(knex) {
   console.log("Migrating...End_Product");
   return knex.schema.createTable("end_product", (table) => {
   table.increments("id");
-  table.string('sat_name');
-  table.string('mission');
+  table.string('name');
+  table.string('product_description');
   table.string('generation');
   table.integer('last_node_id');
   table.foreign('last_node_id').references('player_node.id');

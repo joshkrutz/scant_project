@@ -6,6 +6,7 @@ import { Home } from "./pages/Home.jsx";
 import { Layout } from "./pages/Layout.jsx";
 import { NoPage } from "./pages/NoPage.jsx";
 import { ThemeProvider } from "./components/ThemeProvider.jsx";
+import { Details } from "./pages/Details.jsx";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="*" element={<NoPage />} />
+          <Route path="product/:id" element={<Details />} />
         </Route>
       </Routes>
     </BrowserRouter>

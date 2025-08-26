@@ -10,7 +10,7 @@ exports.seed = async function(knex) {
       name: 'GPS IIIF SV1',
       product_description: 'GPS',
       generation: 'IIIF',
-      image_url: 'https://',
+      image_url: '..\\..\\ui\\src\\assets\\GPS-IIIF.jpeg',
       last_node_id: '3',
     }
 

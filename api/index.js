@@ -11,11 +11,11 @@ const knex = require("knex")(
 );
 
 app.get("/", (req, res) => {
-  knex
-    .select()
-    .from("test")
-    .then((data) => res.status(200).json(data))
-    .catch((err) => res.status(400).json(err));
+  // knex
+  //   .select()
+  //   .from("test")
+  //   .then((data) => res.status(200).json(data))
+  //   .catch((err) => res.status(400).json(err));
 });
 
 app.listen(port, () => {

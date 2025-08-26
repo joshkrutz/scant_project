@@ -206,6 +206,38 @@ app.get("/player_node_join/child/:name", (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
+app.get("/player_node_join/parent/:name/end_id/:id", (req, res) => {
+  knex('player_node_join')
+    .select('player_node_join.id as join id')
+    .select('p.name as Parent name')
+    .select('c.name as Child name')
+    .select('end_product.name as name')
+    .join('player_node as p','p.id','=','player_node_join.parent_id')
+    .join('player_node as c','c.id','=','player_node_join.child_id')
+    .join('end_product','end_product.id','=','player_node_join.end_product_id')
+    .whereILike( 'p.name',`%${req.params.name}%`)
+    .where('end_product.id ','=',req.params.id)
+    // .where('p.name ','=',req.params.name)
+    .then((data) => res.status(200).json(data))
+    .catch((err) => res.status(400).json(err));
+});
+
+app.get("/player_node_join/child/:name/end_id/:id", (req, res) => {
+  knex('player_node_join')
+    .select('player_node_join.id as join id')
+    .select('p.name as Parent name')
+    .select('c.name as Child name')
+    .select('end_product.name as End_Product name')
+    .join('player_node as p','p.id','=','player_node_join.parent_id')
+    .join('player_node as c','c.id','=','player_node_join.child_id')
+    .join('end_product','end_product.id','=','player_node_join.end_product_id')
+    .whereILike( 'c.name',`%${req.params.name}%`)
+    .where('end_product.id ','=',req.params.id)
+    // .where('c.name ','=',req.params.name)
+    .then((data) => res.status(200).json(data))
+    .catch((err) => res.status(400).json(err));
+});
+
 app.get("/bill_of_lading/:id", (req, res) => {
   knex('bill_of_lading')
     .select('bill_of_lading.id as Bill id')

@@ -24,8 +24,10 @@
     "nodemon": "^3.1.10",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.8.2",
     "react-tree-graph": "^8.0.3",
+    "redux": "^5.0.1",
     "swr": "^2.3.6",
     "tailwindcss": "^4.1.12"
   },

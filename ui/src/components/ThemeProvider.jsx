@@ -40,7 +40,6 @@ export function ThemeProvider({
     setTheme: (theme) => {
       localStorage.setItem(storageKey, theme);
       setThemeState(theme);
-      console.log(theme);
     },
     toggleTheme: () => {
       var theme = localStorage.getItem(storageKey);
@@ -48,7 +47,6 @@ export function ThemeProvider({
 
       localStorage.setItem(storageKey, newTheme);
       setThemeState(newTheme);
-      console.log(newTheme);
     },
   };
 
@@ -61,7 +59,6 @@ export function ThemeProvider({
 
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext);
-  console.log(context);
 
   if (context === undefined)
     throw new Error("useTheme must be used within a ThemeProvider");

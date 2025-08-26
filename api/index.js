@@ -155,7 +155,7 @@ app.get("/end_product/name/:name", (req, res) => {
     .select('end_product.image_url as Sat URL')
     .select('player_node.name as Last Node Name')
     .join('player_node','end_product.last_node_id','=','player_node.id')
-    .where('end_product.sat_name','=',req.params.name)
+    .whereILike( 'end_product.sat_name',`%${req.params.name}%`)
     .then((data) => res.status(200).json(data))
     .catch((err) => res.status(400).json(err));
 });

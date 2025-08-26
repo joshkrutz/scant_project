@@ -42,13 +42,28 @@ app.get("/player_nodes", (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
+app.get("/end_product", (req, res) => {
+  knex('end_product')
+    .select('end_product.id as End Product id')
+    .select('end_product.sat_name as Sat Name')
+    .select('end_product.mission as Mission description')
+    .select('end_product.generation as Sat Generation')
+    .select('end_product.image_url as Sat URL')
+    .select('player_node.name as Last Node Name')
+    .join('player_node','end_product.last_node_id','=','player_node.id')
+    .then((data) => res.status(200).json(data))
+    .catch((err) => res.status(400).json(err));
+});
+
 app.get("/player_node_join", (req, res) => {
   knex('player_node_join')
     .select('player_node_join.id as join id')
     .select('p.name as Parent name')
     .select('c.name as Child name')
+    .select('end_product.sat_name as Sat name')
     .join('player_node as p','p.id','=','player_node_join.parent_id')
     .join('player_node as c','c.id','=','player_node_join.child_id')
+    .join('end_product','end_product.id','=','player_node_join.end_product_id')
     .then((data) => res.status(200).json(data))
     .catch((err) => res.status(400).json(err));
 });
@@ -117,13 +132,43 @@ app.get("/player_nodes/name/:name", (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
+app.get("/end_product/:id", (req, res) => {
+  knex('end_product')
+    .select('end_product.id as End Product id')
+    .select('end_product.sat_name as Sat Name')
+    .select('end_product.mission as Mission description')
+    .select('end_product.generation as Sat Generation')
+    .select('end_product.image_url as Sat URL')
+    .select('player_node.name as Last Node Name')
+    .join('player_node','end_product.last_node_id','=','player_node.id')
+    .where('end_product.id','=',req.params.id)
+    .then((data) => res.status(200).json(data))
+    .catch((err) => res.status(400).json(err));
+});
+
+app.get("/end_product/name/:name", (req, res) => {
+  knex('end_product')
+    .select('end_product.id as End Product id')
+    .select('end_product.sat_name as Sat Name')
+    .select('end_product.mission as Mission description')
+    .select('end_product.generation as Sat Generation')
+    .select('end_product.image_url as Sat URL')
+    .select('player_node.name as Last Node Name')
+    .join('player_node','end_product.last_node_id','=','player_node.id')
+    .where('end_product.sat_name','=',req.params.name)
+    .then((data) => res.status(200).json(data))
+    .catch((err) => res.status(400).json(err));
+});
+
 app.get("/player_node_join/:id", (req, res) => {
   knex('player_node_join')
     .select('player_node_join.id as join id')
     .select('p.name as Parent name')
     .select('c.name as Child name')
+    .select('end_product.sat_name as Sat name')
     .join('player_node as p','p.id','=','player_node_join.parent_id')
     .join('player_node as c','c.id','=','player_node_join.child_id')
+    .join('end_product','end_product.id','=','player_node_join.end_product_id')
     .where('player_node_join.id','=',req.params.id)
     .then((data) => res.status(200).json(data))
     .catch((err) => res.status(400).json(err));
@@ -134,8 +179,10 @@ app.get("/player_node_join/parent/:name", (req, res) => {
     .select('player_node_join.id as join id')
     .select('p.name as Parent name')
     .select('c.name as Child name')
+    .select('end_product.sat_name as Sat name')
     .join('player_node as p','p.id','=','player_node_join.parent_id')
     .join('player_node as c','c.id','=','player_node_join.child_id')
+    .join('end_product','end_product.id','=','player_node_join.end_product_id')
     .where('p.name ','=',req.params.name)
     .then((data) => res.status(200).json(data))
     .catch((err) => res.status(400).json(err));
@@ -146,8 +193,10 @@ app.get("/player_node_join/child/:name", (req, res) => {
     .select('player_node_join.id as join id')
     .select('p.name as Parent name')
     .select('c.name as Child name')
+    .select('end_product.sat_name as Sat name')
     .join('player_node as p','p.id','=','player_node_join.parent_id')
     .join('player_node as c','c.id','=','player_node_join.child_id')
+    .join('end_product','end_product.id','=','player_node_join.end_product_id')
     .where('c.name ','=',req.params.name)
     .then((data) => res.status(200).json(data))
     .catch((err) => res.status(400).json(err));

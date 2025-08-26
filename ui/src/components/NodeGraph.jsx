@@ -71,13 +71,9 @@ export function NodeGraph({ selectedNode, setSelectedNode }, props) {
       <AnimatedTree
         nodeProps={{
           fill: "yellow",
-          onClick: (event, node) => {
-            setSelectedNode(node);
-            console.log(event.target);
-          },
         }}
         gProps={{
-          onClick: (node, event) => {
+          onClick: (event, node) => {
             setSelectedNode(node);
             console.log(node);
           },

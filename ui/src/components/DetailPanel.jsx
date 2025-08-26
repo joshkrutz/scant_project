@@ -1,21 +1,34 @@
-import { useEffect, useState } from "react";
+const getNodeDetails = (selectedNode) => {
+  const RECORDS = [
+    { time: new Date(Date.now()), quantity: Math.random() * (10 - 1) + 1 },
+    {
+      time: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+      quantity: Math.random() * (10 - 1) + 1,
+    },
+    {
+      time: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
+      quantity: Math.random() * (10 - 1) + 1,
+    },
+  ];
+
+  return {
+    image:
+      "https://s7d1.scene7.com/is/image/mcdonalds/DC_201910_0010_McRib_1564x1564-1:product-header-mobile?wid=1313&hei=1313&dpr=off",
+    product_str: selectedNode,
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quibusdam dignissimos voluptas quaerat quidem odio saepe aspernatur tempore porro eum, dolores voluptatem repellat nobis eaque quae animi assumenda, deserunt illum quas.",
+    records: RECORDS,
+    rateDifference: RECORDS[0].quantity - RECORDS[1].quantity,
+  };
+};
 
 export function DetailPanel({ selectedNode }, props) {
-  const getNodeDetails = () => {
-    return {
-      image:
-        "hhttps://s7d1.scene7.com/is/image/mcdonalds/DC_201910_0010_McRib_1564x1564-1:product-header-mobile?wid=1313&hei=1313&dpr=off",
-      product_str: selectedNode,
-    };
-  };
-  const [data, setData] = useState();
-  useEffect(() => {
-    setData(getNodeDetails());
-  }, [selectedNode]);
+  const data = getNodeDetails(selectedNode);
+
   return (
     <>
       {data && (
-        <div className="select-none h-[200px] w-[300px] rounded-lg overflow-hidden flex flex-col justify-center items-center">
+        <div className="select-none w-[300px] rounded-lg overflow-hidden flex flex-col justify-center items-center">
           <div
             className={`w-full flex-1`}
             style={{
@@ -25,8 +38,42 @@ export function DetailPanel({ selectedNode }, props) {
             }}
           ></div>
 
-          <div className="bg-[var(--foreground)] gap-3 w-full flex justify-center items-center p-2">
-            <h2>{data.product_str}</h2>
+          <div className="dark:bg-[var(--foreground)] bg-[var(--foreground-light)] gap-3 w-full flex flex-col justify-center items-start p-2">
+            <h2 className="w-full text-center text-2xl">
+              <b>{data.product_str}</b>
+            </h2>
+            <details>
+              <summary>
+                <strong>Description:</strong>
+              </summary>
+              <p>{data.description}</p>
+            </details>
+            <p>
+              <strong>Rate Difference: </strong>
+              <span
+                className={`${
+                  data.rateDifference > 0 ? "text-green-500" : "text-red-500"
+                }`}
+              >
+                {data.rateDifference.toFixed(2)}
+              </span>
+            </p>
+
+            <table id="details-table">
+              <tr>
+                <th>Date</th>
+                <th>Quantity</th>
+              </tr>
+
+              {data.records.map((item) => {
+                return (
+                  <tr key={item.time}>
+                    <td>{item.time.toLocaleDateString()} </td>
+                    <td>{Math.floor(item.quantity)}</td>
+                  </tr>
+                );
+              })}
+            </table>
           </div>
         </div>
       )}

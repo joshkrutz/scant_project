@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export function Tile({ data }) {
   return (
-    <Link to="/">
+    <Link to="/product/1">
       <div className="select-none h-[200px] w-[300px] rounded-lg overflow-hidden flex flex-col justify-center items-center">
         <div
           className={`w-full flex-1`}

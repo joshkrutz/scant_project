@@ -28,6 +28,7 @@ app.get("/locations", (req, res) => {
 
 app.get("/player_nodes", (req, res) => {
   knex('player_node')
+    .select('player_node.id as player id')
     .select('player_node.name as player name')
     .select('player_node.description as player description')
     .select('player_node.clearance as player clearance')
@@ -43,6 +44,7 @@ app.get("/player_nodes", (req, res) => {
 
 app.get("/player_node_join", (req, res) => {
   knex('player_node_join')
+    .select('player_node_join.id as join id')
     .select('p.name as Parent name')
     .select('c.name as Child name')
     .join('player_node as p','p.id','=','player_node_join.parent_id')
@@ -53,6 +55,7 @@ app.get("/player_node_join", (req, res) => {
 
 app.get("/bill_of_lading", (req, res) => {
   knex('bill_of_lading')
+    .select('bill_of_lading.id as Bill id')
     .select('bill_of_lading.product_name as product name')
     .select('bill_of_lading.quantity as product quantity')
     .select('bill_of_lading.start_date as start date')
@@ -72,8 +75,17 @@ app.get("/locations/:id", (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
+app.get("/locations/address/:address", (req, res) => {
+  knex('locations')
+    .select('*')
+    .where('locations.Mailing Address','=',req.params.address)
+    .then((data) => res.status(200).json(data))
+    .catch((err) => res.status(400).json(err));
+});
+
 app.get("/player_nodes/:id", (req, res) => {
   knex('player_node')
+    .select('player_node.id as player id')
     .select('player_node.name as player name')
     .select('player_node.description as player description')
     .select('player_node.clearance as player clearance')
@@ -88,8 +100,26 @@ app.get("/player_nodes/:id", (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
+app.get("/player_nodes/name/:name", (req, res) => {
+  knex('player_node')
+    .select('player_node.id as player id')
+    .select('player_node.name as player name')
+    .select('player_node.description as player description')
+    .select('player_node.clearance as player clearance')
+    .select('player_node.risk_rating as player risk level')
+    .select('player_node.risk_description as player risk description')
+    .select('player_node.affiliation as player affiliation')
+    .select('player_node.image_url as player URL')
+    .select('locations.Mailing Address as Address')
+    .join('locations','player_node.location_id','=','locations.id')
+    .where('player_node.name','=',req.params.name)
+    .then((data) => res.status(200).json(data))
+    .catch((err) => res.status(400).json(err));
+});
+
 app.get("/player_node_join/:id", (req, res) => {
   knex('player_node_join')
+    .select('player_node_join.id as join id')
     .select('p.name as Parent name')
     .select('c.name as Child name')
     .join('player_node as p','p.id','=','player_node_join.parent_id')
@@ -99,8 +129,33 @@ app.get("/player_node_join/:id", (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
+app.get("/player_node_join/parent/:name", (req, res) => {
+  knex('player_node_join')
+    .select('player_node_join.id as join id')
+    .select('p.name as Parent name')
+    .select('c.name as Child name')
+    .join('player_node as p','p.id','=','player_node_join.parent_id')
+    .join('player_node as c','c.id','=','player_node_join.child_id')
+    .where('p.name ','=',req.params.name)
+    .then((data) => res.status(200).json(data))
+    .catch((err) => res.status(400).json(err));
+});
+
+app.get("/player_node_join/child/:name", (req, res) => {
+  knex('player_node_join')
+    .select('player_node_join.id as join id')
+    .select('p.name as Parent name')
+    .select('c.name as Child name')
+    .join('player_node as p','p.id','=','player_node_join.parent_id')
+    .join('player_node as c','c.id','=','player_node_join.child_id')
+    .where('c.name ','=',req.params.name)
+    .then((data) => res.status(200).json(data))
+    .catch((err) => res.status(400).json(err));
+});
+
 app.get("/bill_of_lading/:id", (req, res) => {
   knex('bill_of_lading')
+    .select('bill_of_lading.id as Bill id')
     .select('bill_of_lading.product_name as product name')
     .select('bill_of_lading.quantity as product quantity')
     .select('bill_of_lading.start_date as start date')
@@ -112,6 +167,22 @@ app.get("/bill_of_lading/:id", (req, res) => {
     .then((data) => res.status(200).json(data))
     .catch((err) => res.status(400).json(err));
 });
+
+app.get("/bill_of_lading/name/:name", (req, res) => {
+  knex('bill_of_lading')
+    .select('bill_of_lading.id as Bill id')
+    .select('bill_of_lading.product_name as product name')
+    .select('bill_of_lading.quantity as product quantity')
+    .select('bill_of_lading.start_date as start date')
+    .select('bill_of_lading.end_date as end date')
+    .select('player_node_join.parent_id as Parent')
+    .select('player_node_join.child_id as Child')
+    .join('player_node_join','bill_of_lading.pair_id','=','player_node_join.id')
+    .where('bill_of_lading.product_name','=',req.params.name)
+    .then((data) => res.status(200).json(data))
+    .catch((err) => res.status(400).json(err));
+});
+
 
 app.delete('/:table/:id',(req,res)=>{
   knex(req.params.table)

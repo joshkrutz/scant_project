@@ -27,7 +27,7 @@ services:
   test-api:
     build: api/
     container_name: test-api
-    restart: always
+    # restart: always
     depends_on:
       test-db:
         condition: service_healthy
@@ -42,10 +42,10 @@ services:
       - POSTGRES_PASSWORD=docker
       - POSTGRES_PORT=5432
       - POSTGRES_DB=test
-    volumes:
-      - type: bind
-        source: ./api
-        target: /app
+    # volumes:
+    #   - type: bind
+    #     source: ./api
+    #     target: /api
 
   test-ui:
     build: ui/
@@ -61,11 +61,11 @@ services:
       - app-network
 
     # Uncomment for hot reload
-    volumes:
-      - type: bind
-        source: ./ui
-        target: /app
-      - /app/node_modules
+    # volumes:
+    #   - type: bind
+    #     source: ./ui
+    #     target: /app
+    #   - /app/node_modules
 
 networks:
   app-network:

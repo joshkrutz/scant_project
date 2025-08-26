@@ -28,9 +28,9 @@ export function DetailPanel({ selectedNode }, props) {
   return (
     <>
       {data && (
-        <div className="select-none w-[300px] rounded-lg overflow-hidden flex flex-col justify-center items-center">
+        <div className="select-none w-[300px] rounded-lg overflow-hidden flex flex-col justify-start items-start">
           <div
-            className={`w-full flex-1`}
+            className={`w-full flex-1 max-h-[300px]`}
             style={{
               backgroundImage: `url(${data.image})`,
               backgroundSize: `cover`,
@@ -38,7 +38,7 @@ export function DetailPanel({ selectedNode }, props) {
             }}
           ></div>
 
-          <div className="dark:bg-[var(--foreground)] bg-[var(--foreground-light)] gap-3 w-full flex flex-col justify-center items-start p-2">
+          <div className="dark:bg-[var(--foreground)] bg-[var(--foreground-light)] rounded-b-lg gap-3 w-full flex flex-col justify-center items-start p-2">
             <h2 className="w-full text-center text-2xl">
               <b>{data.product_str}</b>
             </h2>

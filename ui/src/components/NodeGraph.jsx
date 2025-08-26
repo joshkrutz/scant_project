@@ -56,6 +56,7 @@ const data = {
 
 export function NodeGraph({ selectedNode, setSelectedNode }, props) {
   const [offSet, setoffSet] = useState(0);
+  const [prevNode, setPrevNode] = useState();
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -70,12 +71,16 @@ export function NodeGraph({ selectedNode, setSelectedNode }, props) {
     <div className="flex-1 bg-" {...props}>
       <AnimatedTree
         nodeProps={{
-          fill: "yellow",
+          fill: theme === "dark" ? "var(--accent2)" : "var(--accent2-light)",
         }}
         gProps={{
           onClick: (event, node) => {
+            const circle = event.target.parentNode.children[0];
             setSelectedNode(node);
-            console.log(node);
+            prevNode.style.fill =
+              theme === "dark" ? "var(--accent2)" : "var(--accent2-light)";
+            setPrevNode(circle);
+            circle.style.fill = "red";
           },
         }}
         textProps={{

@@ -10,6 +10,8 @@ export default function DemoPage() {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading tree</div>;
 
+  console.log("treeData:", JSON.stringify(data, null, 3));
+
   return <Graph treeData={data} />;
 }
 

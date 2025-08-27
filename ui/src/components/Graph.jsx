@@ -54,7 +54,7 @@ export default function Graph({ treeData }) {
           C ${midX},${from.y} ${midX},${to.y} ${to.x},${to.y}
         `; // blagggggghhh
         /*
-            Start point (from) ----  C1(upper) C2(lower) ---- End point (to)
+            Start point (from x,y) ----  C1(upper: midx, fromY) C2(lower: midx, toY) ---- End point (to x, y)
             curve will S through C1 and C2
         */
 

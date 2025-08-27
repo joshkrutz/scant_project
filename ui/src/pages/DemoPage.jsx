@@ -1,9 +1,12 @@
+import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import Graph from "../components/Graph";
 
 export default function DemoPage() {
+  const params = useParams();
+
   const { data, error, isLoading } = useSWR(
-    "http://localhost:8080/tree/1",
+    `http://localhost:8080/tree/${params.id}`,
     (url) => fetch(url).then((res) => res.json())
   );
 

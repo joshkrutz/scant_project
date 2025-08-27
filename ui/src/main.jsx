@@ -16,7 +16,7 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="*" element={<NoPage />} />
-          <Route path="product/:id" element={<DemoPage />} />
+          <Route path="product/:id" element={<Details />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -77,6 +77,10 @@ export function DetailPanel({ selectedNode }, props) {
               <p>{data.description}</p>
             </details>
             <p>
+              <strong>Company: </strong>
+              <span>{data.player_node}</span>
+            </p>
+            <p>
               <strong>Rate Difference: </strong>
               <span
                 className={`${

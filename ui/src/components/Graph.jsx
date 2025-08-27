@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function Graph({ treeData }) {
-  const [selectedNode, setSelectedNode] = useState(null);
+export default function Graph({ treeData, selectedNode, getProductDetails }) {
   const [dashOffset, setDashOffset] = useState(0);
 
   useEffect(() => {
@@ -18,11 +17,11 @@ export default function Graph({ treeData }) {
   function visit(node) {
     if (!node) return;
 
-    nodes.push({ id: String(node.id), label: node.name });
+    nodes.unshift({ id: String(node.id), label: node.name });
 
     if (node.children) {
       for (let child of node.children) {
-        edges.push({ source: String(node.id), target: String(child.id) });
+        edges.unshift({ source: String(node.id), target: String(child.id) });
         visit(child);
       }
     }
@@ -31,7 +30,7 @@ export default function Graph({ treeData }) {
   visit(treeData);
 
   const startXpos = 100;
-  const nodeGap = 150;
+  const nodeGap = 200;
 
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
@@ -73,18 +72,25 @@ export default function Graph({ treeData }) {
 
       {nodes.map((node) => {
         return (
-          <g key={node.id} onClick={() => setSelectedNode(node)}>
+          <g
+            key={node.id}
+            onClick={async () => {
+              await getProductDetails(node.id);
+            }}
+          >
             <circle
               cx={node.x}
               cy={node.y}
               r={10}
-              fill={selectedNode?.id === node.id ? "green" : "black"}
+              fill={
+                selectedNode?.player_node === node.label ? "green" : "black"
+              }
             />
             <text
               x={node.x}
-              y={node.y + 20}
+              y={node.y + 25}
               textAnchor="middle"
-              fontSize="14"
+              fontSize="12"
               fill="black"
             >
               {node.label}

@@ -10,6 +10,8 @@ exports.up = function(knex) {
   table.foreign('parent_id').references('player_node.id');
   table.integer('child_id');
   table.foreign('child_id').references('player_node.id');
+  table.integer('end_product_id');
+  table.foreign('end_product_id').references('end_product.id');
   });
 };
 
@@ -21,6 +23,7 @@ exports.down = function(knex) {
   return knex.schema.alterTable('player_node_join',table => {
     table.dropForeign('parent_id')
     table.dropForeign('child_id')
+    table.dropForeign('end_product_id')
   })
     .then(function(){
       return knex.schema.dropTableIfExists('player_node_join');

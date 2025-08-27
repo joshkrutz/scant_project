@@ -10,7 +10,15 @@ exports.seed = async function(knex) {
 
   var data =[];
   for(var i =0;i<100;i++){
-    var mock ={ name:faker.company.name() , description:faker.company.catchPhrase(),clearance: 'TS/SCI/no foreign',location_id: faker.number.int(100,1),risk_rating:faker.number.int(10,1),risk_description: 'the subs are better at risk',affiliation:'CTR',image_url: 'https:notavaible'};
+    var mock ={
+      name:faker.company.name() ,
+      description:faker.company.catchPhrase(),
+      clearance: 'TS/SCI/no foreign',
+      location_id: faker.number.int(100,1),
+      risk_rating:faker.number.int(10,1),
+      risk_description: 'the subs are better at risk',
+      affiliation:'CTR',
+      image_url: 'https:notavaible'};
     data.push(mock);
   }
   await knex('player_node').del()

@@ -1,12 +1,10 @@
 import useSWR from "swr";
 import Graph from "../components/Graph";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
-
 export default function DemoPage() {
   const { data, error, isLoading } = useSWR(
     "http://localhost:8080/tree/1",
-    fetcher
+    (url) => fetch(url).then((res) => res.json())
   );
 
   if (isLoading) return <div>Loading...</div>;

@@ -26,7 +26,7 @@ const getNodeDetails = (selectedNode) => {
 };
 
 async function addTransactionHistory(origData) {
-  const newData = { ...origData };
+  let newData = { ...origData };
   try {
     const pair_data = await fetch(
       `http://localhost:8080/player_node_join/child/${origData.player_node}/end_id/${origData.id}`
@@ -60,7 +60,7 @@ export function DetailPanel({ selectedNode }, props) {
           <div
             className={`w-full flex-1 max-h-[300px]`}
             style={{
-              backgroundImage: `url(../${data.image})`,
+              backgroundImage: `url(${data.image})`,
               backgroundSize: `cover`,
               backgroundPosition: `bottom center`,
             }}

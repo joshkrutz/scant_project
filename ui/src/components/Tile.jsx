@@ -8,7 +8,7 @@ export function Tile({ data }) {
         <div
           className={`w-full flex-1`}
           style={{
-            backgroundImage: `url(${data.image})`,
+            backgroundImage: `url(${data.image_url})`,
             backgroundSize: `cover`,
             backgroundPosition: `bottom center`,
           }}
@@ -16,7 +16,7 @@ export function Tile({ data }) {
 
         <div className="dark:bg-[var(--foreground)] bg-[var(--foreground-light)] gap-3 w-full flex justify-center items-center p-2">
           <ArrowUp className="stroke-[var(--trendup)]" />
-          <h2>{data.product_str}</h2>
+          <h2>{data.name}</h2>
         </div>
       </div>
     </Link>

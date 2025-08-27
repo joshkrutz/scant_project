@@ -293,6 +293,25 @@ app.get("/bill_of_lading/:id", (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
+app.get("/all_products", async (req, res) => {
+  const end_products = await knex("player_node_join")
+    .distinct("end_product_id")
+    .select("end_product_id")
+    .catch((err) => res.status(400).json(err));
+
+  const end_prod_ids = end_products.map((item) => item.end_product_id);
+
+  // Get products for each end prod
+  const prodPromises = end_prod_ids.map(async (id) => {
+    const end_product_json = await knex("end_product")
+      .select("*")
+      .where("id", "=", id);
+    return end_product_json[0];
+  });
+
+  res.status(200).json(await Promise.all(prodPromises));
+});
+
 app.get("/tree/:product_id", async (req, res) => {
   const [product, pairs, players] = await Promise.all([
     knex("end_product").select("*").where("id", "=", req.params.product_id),

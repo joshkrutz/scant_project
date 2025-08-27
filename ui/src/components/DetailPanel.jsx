@@ -60,7 +60,7 @@ export function DetailPanel({ selectedNode }, props) {
           <div
             className={`w-full flex-1 max-h-[300px]`}
             style={{
-              backgroundImage: `url(../${data.image})`,
+              backgroundImage: `url(${data.image})`,
               backgroundSize: `cover`,
               backgroundPosition: `bottom center`,
             }}

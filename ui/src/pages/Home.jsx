@@ -4,7 +4,7 @@ import { Gallery } from "../components/Gallery.jsx";
 
 export function Home() {
   const { data, error, isLoading } = useSWR(
-    "http://localhost:8080/end_product",
+    "http://localhost:8080/all_products", 
     (url) =>
       fetch(url)
         .then((res) => res.json())

@@ -1,3 +1,6 @@
+// import { data, data } from "react-router-dom";
+import useSWR from "swr";
+
 const getNodeDetails = (selectedNode) => {
   const RECORDS = [
     { time: new Date(Date.now()), quantity: Math.random() * (10 - 1) + 1 },
@@ -22,8 +25,33 @@ const getNodeDetails = (selectedNode) => {
   };
 };
 
+async function addTransactionHistory(origData) {
+  let newData = { ...origData };
+  try {
+    const pair_data = await fetch(
+      `http://localhost:8080/player_node_join/child/${origData.player_node}/end_id/${origData.id}`
+    );
+    const pair_json = await pair_data.json();
+
+    const bill_of_lading_data = await fetch(
+      `http://localhost:8080/bill_of_lading/pair_id/${pair_json[0]["join id"]}`
+    );
+    const b_o_l = await bill_of_lading_data.json();
+    console.log(b_o_l);
+
+    newData = { ...newData, records: b_o_l };
+    console.log(newData);
+    //setData(newData);
+  } catch (err) {
+    //setError(err);
+  } finally {
+    //setIsLoading(false);
+  }
+}
+
 export function DetailPanel({ selectedNode }, props) {
-  const data = getNodeDetails(selectedNode);
+  let data = selectedNode;
+  addTransactionHistory(data);
 
   return (
     <>
@@ -40,7 +68,7 @@ export function DetailPanel({ selectedNode }, props) {
 
           <div className="dark:bg-[var(--foreground)] bg-[var(--foreground-light)] rounded-b-lg gap-3 w-full flex flex-col justify-center items-start p-2">
             <h2 className="w-full text-center text-2xl">
-              <b>{data.product_str}</b>
+              <strong>{data.product_str}</strong>
             </h2>
             <details>
               <summary>
@@ -55,7 +83,8 @@ export function DetailPanel({ selectedNode }, props) {
                   data.rateDifference > 0 ? "text-green-500" : "text-red-500"
                 }`}
               >
-                {data.rateDifference.toFixed(2)}
+                {200}
+                {/* {data.rateDifference.toFixed(2)} */}
               </span>
             </p>
 
@@ -64,15 +93,15 @@ export function DetailPanel({ selectedNode }, props) {
                 <th>Date</th>
                 <th>Quantity</th>
               </tr>
-
-              {data.records.map((item) => {
+              {}
+              {/* {data.records.map((item) => {
                 return (
                   <tr key={item.time}>
                     <td>{item.time.toLocaleDateString()} </td>
                     <td>{Math.floor(item.quantity)}</td>
                   </tr>
                 );
-              })}
+              })} */}
             </table>
           </div>
         </div>

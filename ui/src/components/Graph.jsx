@@ -65,7 +65,7 @@ export default function Graph({ treeData }) {
             fill="none"
             stroke="red"
             strokeWidth="2"
-            strokeDasharray="6,6"
+            strokeDasharray="10, 10"
             strokeDashoffset={dashOffset}
           />
         );

@@ -5,7 +5,7 @@ export default function Graph({ treeData, selectedNode, getProductDetails }) {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setDashOffset((prev) => prev - 1);
+      setDashOffset((prev) => prev + 1);
     }, 30);
     return () => clearInterval(timer);
   }, []);
@@ -17,11 +17,11 @@ export default function Graph({ treeData, selectedNode, getProductDetails }) {
   function visit(node) {
     if (!node) return;
 
-    nodes.push({ id: String(node.id), label: node.name });
+    nodes.unshift({ id: String(node.id), label: node.name });
 
     if (node.children) {
       for (let child of node.children) {
-        edges.push({ source: String(node.id), target: String(child.id) });
+        edges.unshift({ source: String(node.id), target: String(child.id) });
         visit(child);
       }
     }

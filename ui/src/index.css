@@ -38,3 +38,12 @@ body {
 #root {
   width: 100%;
 }
+
+#details-table {
+  width: 100%;
+}
+
+#details-table td {
+  text-align: center;
+  padding: 8px;
+}

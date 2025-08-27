@@ -3,25 +3,65 @@ import { AnimatedTree } from "react-tree-graph";
 import { useTheme } from "./ThemeProvider";
 
 const data = {
-  name: "Parent",
+  name: "McRib",
+  id: 1,
+
   children: [
     {
-      name: "Child One",
+      name: "pickles",
+      id: 2,
+      children: [
+        {
+          name: "Cuc",
+          id: 3,
+          children: [
+            {
+              name: "Josh's Farm",
+              id: 4,
+            },
+          ],
+        },
+        {
+          name: "Vinegar",
+          id: 5,
+          children: [
+            {
+              name: "Josh's Farm2",
+              id: 6,
+            },
+          ],
+        },
+      ],
     },
     {
-      name: "Child Two",
+      name: "Onion",
+      id: 7,
+    },
+    {
+      name: "Buns",
+      id: 8,
+      children: [
+        {
+          name: "Flour",
+          id: 9,
+        },
+        {
+          name: "Yeast",
+          id: 10,
+        },
+      ],
     },
   ],
 };
 
-export function NodeGraph(props) {
+export function NodeGraph({ selectedNode, setSelectedNode }, props) {
   const [offSet, setoffSet] = useState(0);
+  const [prevNode, setPrevNode] = useState();
   const { theme } = useTheme();
 
   useEffect(() => {
     const animatePath = setInterval(() => {
-      setoffSet((prev) => prev - 1);
-      console.log(offSet);
+      setoffSet((prev) => prev + 1);
     }, 20);
     return () => {
       clearInterval(animatePath);
@@ -30,10 +70,22 @@ export function NodeGraph(props) {
   return (
     <div className="flex-1 bg-" {...props}>
       <AnimatedTree
-        nodeProps={{ fill: "yellow" }}
+        nodeProps={{
+          fill: theme === "dark" ? "var(--accent2)" : "var(--accent2-light)",
+        }}
+        gProps={{
+          onClick: (event, node) => {
+            const circle = event.target.parentNode.children[0];
+            setSelectedNode(node);
+            prevNode.style.fill =
+              theme === "dark" ? "var(--accent2)" : "var(--accent2-light)";
+            setPrevNode(circle);
+            circle.style.fill = "red";
+          },
+        }}
         textProps={{
           y: "20",
-          x: "-10",
+          x: "20",
           fontWeight: "900",
           fill: theme === "dark" ? "var(--color)" : "var(--color-light)",
           stroke: "none",
@@ -47,6 +99,7 @@ export function NodeGraph(props) {
         data={data}
         height={400}
         width={400}
+        direction="rtl"
       />
     </div>
   );

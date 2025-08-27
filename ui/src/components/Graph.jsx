@@ -17,11 +17,11 @@ export default function Graph({ treeData, selectedNode, getProductDetails }) {
   function visit(node) {
     if (!node) return;
 
-    nodes.unshift({ id: String(node.id), label: node.name });
+    nodes.push({ id: String(node.id), label: node.name });
 
     if (node.children) {
       for (let child of node.children) {
-        edges.unshift({ source: String(node.id), target: String(child.id) });
+        edges.push({ source: String(node.id), target: String(child.id) });
         visit(child);
       }
     }
@@ -29,13 +29,13 @@ export default function Graph({ treeData, selectedNode, getProductDetails }) {
 
   visit(treeData);
 
-  const startXpos = 100;
+  const startYpos = 100;
   const nodeGap = 200;
 
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
-    node.x = startXpos + i * nodeGap;
-    node.y = 100;
+    node.x = 100;
+    node.y = startYpos + i * nodeGap;
   }
 
   const W = 800;
@@ -47,10 +47,10 @@ export default function Graph({ treeData, selectedNode, getProductDetails }) {
         const from = nodes.find((node) => node.id === edge.source);
         const to = nodes.find((node) => node.id === edge.target);
 
-        const midX = (from.x + to.x) / 2;
+        const midY = (from.y + to.y) / 2;
         const path = `
-          M ${from.x},${from.y}
-          C ${midX},${from.y} ${midX},${to.y} ${to.x},${to.y}
+            M ${from.x},${from.y}
+            C ${from.x},${midY} ${to.x},${midY} ${to.x},${to.y}
         `; // blagggggghhh
         /*
             Start point (from x,y) ----  C1(upper: midx, fromY) C2(lower: midx, toY) ---- End point (to x, y)
@@ -89,7 +89,7 @@ export default function Graph({ treeData, selectedNode, getProductDetails }) {
             <text
               x={node.x}
               y={node.y + 25}
-              textAnchor="middle"
+              textAnchor="start"
               fontSize="12"
               fill="black"
             >

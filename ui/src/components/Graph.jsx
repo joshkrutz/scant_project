@@ -5,7 +5,7 @@ export default function Graph({ treeData, selectedNode, getProductDetails }) {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setDashOffset((prev) => prev + 1);
+      setDashOffset((prev) => prev - 1);
     }, 30);
     return () => clearInterval(timer);
   }, []);

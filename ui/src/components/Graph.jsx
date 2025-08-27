@@ -1,51 +1,67 @@
 import { useState, useEffect } from "react";
 
-export default function Graph({ nodes, edges }) {
+export default function Graph({ treeData }) {
   const [selectedNode, setSelectedNode] = useState(null);
   const [dashOffset, setDashOffset] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const timer = setInterval(() => {
       setDashOffset((prev) => prev + 1);
     }, 30);
-    return () => clearInterval(interval);
+    return () => clearInterval(timer);
   }, []);
 
-  // node position
-  const layout = {
-    1: { x: 300, y: 50 }, // GPS IIIF SV1
-    2: { x: 200, y: 200 }, // SAIC
-    3: { x: 400, y: 200 }, // Lockheed Martin
-    4: { x: 300, y: 350 }, // Tech Reports
-  };
+  // walk recursively, put treeData into nodes/edges
+  const nodes = [];
+  const edges = [];
 
-  const W = 600;
-  const H = 500;
-  const toRTL = ({ x, y }) => ({ x: W - y, y: x });
+  function visit(node) {
+    if (!node) return;
+
+    nodes.push({ id: String(node.id), label: node.name });
+
+    if (node.children) {
+      for (let child of node.children) {
+        edges.push({ source: String(node.id), target: String(child.id) });
+        visit(child);
+      }
+    }
+  }
+
+  visit(treeData);
+
+  const startXpos = 100;
+  const nodeGap = 150;
+
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    node.x = startXpos + i * nodeGap;
+    node.y = 100;
+  }
+
+  const W = 800;
+  const H = 600;
 
   return (
-    <svg width={W} height={H} style={{ border: "1px solid black" }}>
+    <svg width={W} height={H}>
       {edges.map((edge, index) => {
-        const sourcePos = toRTL(layout[edge.source]);
-        const targetPos = toRTL(layout[edge.target]);
+        const from = nodes.find((node) => node.id === edge.source);
+        const to = nodes.find((node) => node.id === edge.target);
 
-        // control points for the curve -- aiming for S-shaped like the tree graph one
-        const midX = (sourcePos.x + targetPos.x) / 2;
-        const c1x = midX;
-        const c1y = sourcePos.y;
-        const c2x = midX;
-        const c2y = targetPos.y;
-
-        // Cubic Bezier curve
-        const edgePath = `
-          M ${sourcePos.x},${sourcePos.y}
-          C ${c1x},${c1y} ${c2x},${c2y} ${targetPos.x},${targetPos.y}
-        `;
+        const midX = (from.x + to.x) / 2;
+        const path = `
+          M ${from.x},${from.y}
+          C ${midX},${from.y} ${midX},${to.y} ${to.x},${to.y}
+        `; // blagggggghhh
+        /*
+            Start point (from) ----  C1(upper) C2(lower) ---- End point (to)
+            curve will S through C1 and C2
+        */
 
         return (
           <path
             key={index}
-            d={edgePath}
+            d={path}
             fill="none"
             stroke="red"
             strokeWidth="2"
@@ -56,22 +72,19 @@ export default function Graph({ nodes, edges }) {
       })}
 
       {nodes.map((node) => {
-        const pos = toRTL(layout[node.id]);
-
         return (
           <g key={node.id} onClick={() => setSelectedNode(node)}>
             <circle
-              cx={pos.x}
-              cy={pos.y}
+              cx={node.x}
+              cy={node.y}
               r={10}
               fill={selectedNode?.id === node.id ? "green" : "black"}
             />
             <text
-              x={pos.x}
-              y={pos.y + 30}
+              x={node.x}
+              y={node.y + 20}
               textAnchor="middle"
               fontSize="14"
-              fontWeight="bold"
               fill="black"
             >
               {node.label}

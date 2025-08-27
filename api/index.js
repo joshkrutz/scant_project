@@ -293,6 +293,44 @@ app.get("/bill_of_lading/:id", (req, res) => {
     .catch((err) => res.status(400).json(err));
 });
 
+app.get("/tree/:product_id", async (req, res) => {
+  const [product, pairs, players] = await Promise.all([
+    knex("end_product").select("*").where("id", "=", req.params.product_id),
+    knex("player_node_join")
+      .select("*")
+      .where("end_product_id", "=", req.params.product_id)
+      .catch((err) => res.status(400).json(err)),
+    knex("player_node").select("*"),
+  ]);
+
+  const root = product[0].last_node_id;
+
+  const parents = {};
+  pairs.forEach(({ parent_id, child_id }) => {
+    if (!parents[child_id]) parents[child_id] = [];
+    parents[child_id].push(parent_id);
+  });
+
+  const getPlayerById = (id) => {
+    return players.filter((item) => item.id === id)[0];
+  };
+
+  const buildTree = (fromId) => {
+    let player = getPlayerById(fromId);
+    if (!player) return;
+    return {
+      ...player,
+      children: (parents[fromId] || []).map(buildTree),
+    };
+  };
+
+  try {
+    const output = buildTree(root);
+    return res.status(200).json(output);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
 
 app.get("/bill_of_lading/pair_id/:id", (req, res) => {
   knex("bill_of_lading")

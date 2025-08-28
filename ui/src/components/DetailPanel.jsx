@@ -1,4 +1,5 @@
-// import { data, data } from "react-router-dom";
+// import { selectedNode, data } from "react-router-dom";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 const getNodeDetails = (selectedNode) => {
@@ -26,23 +27,23 @@ const getNodeDetails = (selectedNode) => {
 };
 
 async function addTransactionHistory(origData) {
-  let newData = { ...origData };
   try {
     const pair_data = await fetch(
       `http://localhost:8080/player_node_join/child/${origData.player_node}/end_id/${origData.id}`
     );
     const pair_json = await pair_data.json();
+    console.log(pair_json);
 
     const bill_of_lading_data = await fetch(
       `http://localhost:8080/bill_of_lading/pair_id/${pair_json[0]["join id"]}`
     );
     const b_o_l = await bill_of_lading_data.json();
     console.log(b_o_l);
+    return b_o_l;
 
-    newData = { ...newData, records: b_o_l };
-    console.log(newData);
     //setData(newData);
   } catch (err) {
+    console.log(err);
     //setError(err);
   } finally {
     //setIsLoading(false);
@@ -50,17 +51,29 @@ async function addTransactionHistory(origData) {
 }
 
 export function DetailPanel({ selectedNode }, props) {
-  let data = selectedNode;
-  addTransactionHistory(data);
+  const [bills, setBills] = useState();
+
+  useEffect(() => {
+    if (!selectedNode) {
+      return;
+    }
+    console.log(selectedNode);
+    async function populateTransactionHistory() {
+      const temp = await addTransactionHistory(selectedNode);
+      setBills(temp);
+      console.log(temp);
+    }
+    populateTransactionHistory();
+  }, [selectedNode]);
 
   return (
     <>
-      {data && (
-        <div className="select-none w-[300px] rounded-lg overflow-hidden flex flex-col justify-start items-start">
+      {selectedNode && (
+        <div className="select-none w-[600px] rounded-lg overflow-hidden flex flex-col justify-start items-start">
           <div
             className={`w-full flex-1 max-h-[300px]`}
             style={{
-              backgroundImage: `url(${data.image})`,
+              backgroundImage: `url(${selectedNode.image})`,
               backgroundSize: `cover`,
               backgroundPosition: `bottom center`,
             }}
@@ -68,45 +81,53 @@ export function DetailPanel({ selectedNode }, props) {
 
           <div className="dark:bg-[var(--foreground)] bg-[var(--foreground-light)] rounded-b-lg gap-3 w-full flex flex-col justify-center items-start p-2">
             <h2 className="w-full text-center text-2xl">
-              <strong>{data.product_str}</strong>
+              <strong>{selectedNode.product_str}</strong>
             </h2>
             <details>
               <summary>
                 <strong>Description:</strong>
               </summary>
-              <p>{data.description}</p>
+              <p>{selectedNode.description}</p>
             </details>
             <p>
               <strong>Company: </strong>
-              <span>{data.player_node}</span>
+              <span>{selectedNode.player_node}</span>
             </p>
             <p>
               <strong>Rate Difference: </strong>
               <span
                 className={`${
-                  data.rateDifference > 0 ? "text-green-500" : "text-red-500"
+                  selectedNode.rateDifference > 0
+                    ? "text-green-500"
+                    : "text-red-500"
                 }`}
               >
                 {200}
-                {/* {data.rateDifference.toFixed(2)} */}
+                {/* {selectedNode.rateDifference.toFixed(2)} */}
               </span>
             </p>
 
-            <table id="details-table">
-              <tr>
-                <th>Date</th>
-                <th>Quantity</th>
-              </tr>
-              {}
-              {/* {data.records.map((item) => {
-                return (
-                  <tr key={item.time}>
-                    <td>{item.time.toLocaleDateString()} </td>
-                    <td>{Math.floor(item.quantity)}</td>
-                  </tr>
-                );
-              })} */}
-            </table>
+            {bills && (
+              <table id="details-table">
+                <tr>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Quantity</th>
+                </tr>
+
+                {bills.map((item) => {
+                  return (
+                    <tr key={item["Bill id"]}>
+                      <td>
+                        {new Date(item["start date"]).toLocaleDateString()}
+                      </td>
+                      <td>{new Date(item["end date"]).toLocaleDateString()}</td>
+                      <td>{Math.floor(item["product quantity"])}</td>
+                    </tr>
+                  );
+                })}
+              </table>
+            )}
           </div>
         </div>
       )}

@@ -7,6 +7,7 @@
 
   --background: #0b141c;
   --foreground: #1c2f41;
+  --foregroundAccent: #31506e;
   --color: rgba(255, 255, 255, 0.87);
   --accent1: #02a2f4;
   --accent2: #f7b801;
@@ -14,6 +15,7 @@
   --color-light: #213547;
   --background-light: #ede5da;
   --foreground-light: #ccc7c1;
+  --foregroundAccent-light: #f1ede7;
   --accent1-light: #163447;
   --accent2-light: #edb540;
 
